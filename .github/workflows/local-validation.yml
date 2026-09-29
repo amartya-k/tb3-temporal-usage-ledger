@@ -1,0 +1,44 @@
+name: TB3 local validation
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Check Docker
+        run: docker info
+      - name: Get pinned Terminal-Bench 3 checks
+        run: |
+          git clone --depth 1 https://github.com/harbor-framework/terminal-bench-3.git tb3
+          git -C tb3 fetch --depth 1 origin 4def1f367467b34b18e0dbdc086400ba71c3e037
+          git -C tb3 checkout 4def1f367467b34b18e0dbdc086400ba71c3e037
+          cp -R tasks/temporal-usage-ledger tb3/tasks/
+      - name: Static checks
+        run: |
+          cd tb3
+          for check in scripts/checks/check-*.sh; do
+            bash "$check" tasks/temporal-usage-ledger || exit 1
+          done
+      - name: Docker build and oracle
+        run: |
+          cd tb3
+          uvx --from harbor==0.23.1.dev202609170426 harbor run +            -p tasks/temporal-usage-ledger --agent oracle --env docker --yes +            --jobs-dir ../harbor-oracle
+      - name: Nop
+        if: always()
+        run: |
+          cd tb3
+          uvx --from harbor==0.23.1.dev202609170426 harbor run +            -p tasks/temporal-usage-ledger --agent nop --env docker --yes +            --jobs-dir ../harbor-nop
+      - name: Preserve raw validation results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: harbor-validation
+          path: |
+            harbor-oracle
+            harbor-nop
