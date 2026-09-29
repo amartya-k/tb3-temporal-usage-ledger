@@ -8,4 +8,6 @@ Each query has `id, as_of, start, end`; query IDs are unique, and queries must b
 
 Write `{"queries":[{"id":STRING,"accounts":[{"account":STRING,"units":INTEGER,"unpriced_units":INTEGER,"charge_cents":INTEGER}, ...]}, ...]}`. `units` includes both priced and unpriced units. Sort each `accounts` array by account name. No extra keys are required. The input is well-formed; you do not need to validate malformed records. The program must work when rerun against the same input and when the input arrays are permuted.
 
+Each invocation must finish within 25 seconds with 2 CPUs and 2 GB RAM for inputs containing up to 100 session revisions, 100 tariff revisions, and 20 queries. Timestamps may reach 2,000,000,000 seconds and quantities may reach 2^61 units; integer precision must be preserved.
+
 You have 14400 seconds to complete this task. Do not cheat by using online solutions or hints specific to this task.

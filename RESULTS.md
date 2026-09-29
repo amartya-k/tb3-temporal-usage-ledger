@@ -1,12 +1,29 @@
 # Temporal usage ledger: evaluation record
 
-Source baseline: `harbor-framework/terminal-bench-3` commit
-`4def1f367467b34b18e0dbdc086400ba71c3e037`, inspected 2026-09-29 UTC.
+Current source baseline: `harbor-framework/terminal-bench` commit
+`1dcda8716784493721921c23e4bc7f7d988b4494`, inspected 2026-09-29 UTC.
+The original baseline was `4def1f367467b34b18e0dbdc086400ba71c3e037`.
 The contribution call, `CONTRIBUTING.md`, `docs/TASK_REVIEW_AUTOMATION.md`,
 `docs/REVIEWING.md`, rubric, static scripts, and trial workflow were reviewed.
 This is an independent hiring submission; no upstream PR is needed.
 
-## Results actually obtained
+## Current iteration
+
+The verifier now clears supplementary groups, drops UID/GID, prevents privilege
+recovery, captures subprocess output to files, and kills the subprocess group.
+The task also declares its invocation time and input limits, tests same-time
+revision precedence and large integers, and includes the newly required README
+metadata. All 26 current static scripts pass locally. The result gate was checked
+to reject timeout exceptions, absent rewards, unfinished trials, and positive
+rewards when zero is required. Docker validation of this revision is pending.
+
+The rubric and model workflow is prepared in `.github/workflows/model-evaluation.yml`.
+It uses the upstream production reviewer staging script and the current defaults.
+See [RUNNING.md](RUNNING.md) for the authentication and execution steps.
+The prepared matrix contains 12 standard trials and four cheat trials across
+both the current CI pair and assignment pair; none have been run yet.
+
+## Earlier iteration results actually obtained
 
 | Check | Command / method | Result |
 | --- | --- | --- |
@@ -14,7 +31,7 @@ This is an independent hiring submission; no upstream PR is needed.
 | Reference behavior | Ran all five black-box tests with the reference CLI substituted, including generated histories and the billion-second sparse case | PASS, 5/5 |
 | Nop sanity | Compared the supplied legacy program with the independent fixed-history reference | Different output as intended; this is **not** a Harbor nop validation |
 | Harbor dry-run | `uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent oracle --env docker --dry-run --yes` | Blocked: `Docker is not installed or not on PATH` |
-| Implementation rubric | `harbor check` with the current rubric and reviewer model | NOT RUN: reviewer credentials unavailable |
+| Implementation rubric | Upstream staged reviewer and configured review model | NOT RUN: reviewer credentials unavailable |
 | Docker build | GitHub Actions `TB3 local validation` run #2, `harbor run --agent oracle` and `--agent nop` on Docker | PASS: both environment builds and runs completed, no exceptions |
 | Oracle | `uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent oracle --env docker --yes --jobs-dir ../harbor-oracle` | PASS: 1 trial, 0 exceptions, reward 1.0 |
 | Nop | Same Harbor invocation with `--agent nop --jobs-dir ../harbor-nop` | PASS: 1 trial, 0 exceptions, reward 0.0 |
@@ -55,7 +72,8 @@ From a fresh TB3 checkout with this `tasks/temporal-usage-ledger` directory:
 for check in scripts/checks/check-*.sh; do
   bash "$check" tasks/temporal-usage-ledger || exit 1
 done
-harbor check tasks/temporal-usage-ledger -r docs/prompts/task-implementation.toml -m anthropic/claude-sonnet-5
+# Run the repository's Model evaluation workflow with kind=review for the
+# production staged reviewer and complete per-criterion verdicts.
 harbor run -p tasks/temporal-usage-ledger --agent oracle --env docker --yes
 harbor run -p tasks/temporal-usage-ledger --agent nop --env docker --yes
 
@@ -94,6 +112,6 @@ above.
 `tasks/temporal-usage-ledger/README.md` is an AI-assisted draft. TB3's guide
 requires its four explanatory sections to be written completely by a human.
 Amartya should replace them in his own words after reviewing the implementation.
-The task still needs the rubric, six standard trials, and two adversarial
-trials recorded here. Until then this is a candidate, not a qualifying
-submission.
+The task still needs a passing rubric, the required standard and adversarial
+trials, and their trajectory analyses recorded here. Until then this is a
+candidate, not a qualifying submission.

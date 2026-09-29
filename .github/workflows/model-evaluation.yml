@@ -1,0 +1,83 @@
+name: Model evaluation
+
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: Run the rubric first, then standard and cheat trials
+        type: choice
+        options: [review, standard, cheat]
+        default: review
+      configuration:
+        description: Current CI defaults, assignment models, or both
+        type: choice
+        options: [both, ci, assignment]
+        default: both
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: harbor-framework/terminal-bench
+          ref: 1dcda8716784493721921c23e4bc7f7d988b4494
+          path: tb3
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v6
+      - name: Build matrix from upstream defaults
+        id: plan
+        env:
+          KIND: ${{ inputs.kind }}
+          CONFIGURATION: ${{ inputs.configuration }}
+        run: |
+          matrix=$(uv run --with PyYAML==6.0.3 python scripts/evaluate.py --matrix "$KIND" --configuration "$CONFIGURATION")
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  evaluate:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: harbor-framework/terminal-bench
+          ref: 1dcda8716784493721921c23e4bc7f7d988b4494
+          path: tb3
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v6
+      - name: Install pinned Harbor
+        run: uv tool install "harbor==$(cat tb3/.github/harbor-version)"
+      - name: Run and validate recorded results
+        env:
+          ENTRY: ${{ toJSON(matrix) }}
+          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: uv run --with PyYAML==6.0.3 python scripts/evaluate.py --entry "$ENTRY"
+      - name: Prepare evidence
+        if: always()
+        env:
+          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: python scripts/prepare_evidence.py
+      - name: Preserve evaluation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-${{ matrix.id }}
+          path: evidence

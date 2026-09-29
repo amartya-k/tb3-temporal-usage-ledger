@@ -2,6 +2,10 @@ name: TB3 local validation
 
 on:
   push:
+    paths:
+      - 'tasks/**'
+      - 'scripts/**'
+      - '.github/workflows/local-validation.yml'
   workflow_dispatch:
 
 jobs:
@@ -15,9 +19,9 @@ jobs:
         run: docker info
       - name: Get pinned Terminal-Bench 3 checks
         run: |
-          git clone --depth 1 https://github.com/harbor-framework/terminal-bench-3.git tb3
-          git -C tb3 fetch --depth 1 origin 4def1f367467b34b18e0dbdc086400ba71c3e037
-          git -C tb3 checkout 4def1f367467b34b18e0dbdc086400ba71c3e037
+          git clone --depth 1 https://github.com/harbor-framework/terminal-bench.git tb3
+          git -C tb3 fetch --depth 1 origin 1dcda8716784493721921c23e4bc7f7d988b4494
+          git -C tb3 checkout 1dcda8716784493721921c23e4bc7f7d988b4494
           cp -R tasks/temporal-usage-ledger tb3/tasks/
       - name: Static checks
         run: |
@@ -29,11 +33,13 @@ jobs:
         run: |
           cd tb3
           uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent oracle --env docker --yes --jobs-dir ../harbor-oracle
+          python ../scripts/check_results.py ../harbor-oracle --expected 1
       - name: Nop
         if: always()
         run: |
           cd tb3
           uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent nop --env docker --yes --jobs-dir ../harbor-nop
+          python ../scripts/check_results.py ../harbor-nop --expected 0
       - name: Preserve raw validation results
         if: always()
         uses: actions/upload-artifact@v4

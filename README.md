@@ -12,13 +12,18 @@ checks actually run from checks still pending. This is a **candidate**, not a
 claim that the hiring assignment's all-fail trial requirement has been met.
 
 The task format follows Terminal-Bench 3 at upstream commit
-`4def1f367467b34b18e0dbdc086400ba71c3e037`. Copy its task folder into a
+`1dcda8716784493721921c23e4bc7f7d988b4494`. Copy its task folder into a
 checkout of that revision to run upstream static checks and the rubric.
 Harbor can run the task directly from this repository's task path once Docker
 and agent credentials are configured.
-The included GitHub Actions workflow passed static checks, oracle, and nop
-validation on a Docker-capable runner and preserved the raw Harbor results.
+The included GitHub Actions workflow checks static rules, oracle, and nop
+validation on a Docker-capable runner and preserves the raw Harbor results.
 It does not substitute for the rubric or agent trials.
+
+[Evaluation setup](RUNNING.md) describes the prepared subscription-authenticated
+rubric and trial workflow. The task was updated for the latest static requirements
+and verifier isolation rules; earlier validation results apply to the earlier
+revision only.
 
 The four task README explanations are AI-assisted drafts. The contribution
 guide requires the author to rewrite those sections personally before
