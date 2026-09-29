@@ -16,8 +16,8 @@ The task format follows Terminal-Bench 3 at upstream commit
 checkout of that revision to run upstream static checks and the rubric.
 Harbor can run the task directly from this repository's task path once Docker
 and agent credentials are configured.
-The included GitHub Actions workflow runs static checks, oracle, and nop
-validation on a Docker-capable runner and preserves the raw Harbor results.
+The included GitHub Actions workflow passed static checks, oracle, and nop
+validation on a Docker-capable runner and preserved the raw Harbor results.
 It does not substitute for the rubric or agent trials.
 
 The four task README explanations are AI-assisted drafts. The contribution
