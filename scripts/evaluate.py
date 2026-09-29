@@ -15,7 +15,7 @@ TASK = "tasks/temporal-usage-ledger"
 UPSTREAM = ROOT / "tb3"
 
 
-def matrix(kind, configuration):
+def matrix(kind, configuration, selected_agent="all"):
     defaults = yaml.safe_load((UPSTREAM / ".github/harbor-run-defaults.yml").read_text())
     if kind == "review":
         return [{"id": "review", "kind": kind, "agent": defaults["review_agent"],
@@ -30,6 +30,8 @@ def matrix(kind, configuration):
             agents.append(dict(inherited, model=model, source="assignment"))
     entries = []
     for agent in agents:
+        if selected_agent != "all" and agent["agent"] != selected_agent:
+            continue
         for attempt in range(1, (defaults["trials"] if kind == "standard" else 1) + 1):
             entries.append(dict(agent, kind=kind,
                                 id=f"{kind}-{agent['source']}-{agent['agent']}-{attempt}"))
@@ -109,9 +111,10 @@ if __name__ == "__main__":
     parser.add_argument("--matrix", choices=("review", "standard", "cheat"))
     parser.add_argument("--configuration", choices=("ci", "assignment", "both"), default="both")
     parser.add_argument("--entry")
+    parser.add_argument("--selected-agent", choices=("all", "codex", "claude-code"), default="all")
     args = parser.parse_args()
     if args.matrix:
-        print(json.dumps({"include": matrix(args.matrix, args.configuration)}))
+        print(json.dumps({"include": matrix(args.matrix, args.configuration, args.selected_agent)}))
     elif args.entry:
         run(json.loads(args.entry))
     else:

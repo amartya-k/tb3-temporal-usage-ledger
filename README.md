@@ -22,8 +22,9 @@ It does not substitute for the rubric or agent trials.
 
 [Evaluation setup](RUNNING.md) describes the prepared subscription-authenticated
 rubric and trial workflow. The task was updated for the latest static requirements
-and verifier isolation rules; earlier validation results apply to the earlier
-revision only.
+and verifier isolation rules. The current task passed all 26 static checks,
+Docker builds, oracle (reward 1), and nop (reward 0); see the linked evaluation
+record for the exact tested revision and evidence.
 
 The four task README explanations are AI-assisted drafts. The contribution
 guide requires the author to rewrite those sections personally before

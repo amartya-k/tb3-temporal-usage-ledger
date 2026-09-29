@@ -15,13 +15,30 @@ The task also declares its invocation time and input limits, tests same-time
 revision precedence and large integers, and includes the newly required README
 metadata. All 26 current static scripts pass locally. The result gate was checked
 to reject timeout exceptions, absent rewards, unfinished trials, and positive
-rewards when zero is required. Docker validation of this revision is pending.
+rewards when zero is required.
+
+Docker validation passed in [run 36564356995](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36564356995)
+at task revision `b59905dcb6a39a96659af1eae8e0c747d79cb9bc`:
+
+| Check | Result |
+| --- | --- |
+| All 26 current static scripts | PASS |
+| Docker environment and verifier images | PASS |
+| Oracle | 1 trial, reward 1.0, zero exceptions |
+| Nop | 1 trial, reward 0.0, zero exceptions |
+| Explicit result validation | PASS for both oracle and nop |
+
+The [raw Harbor artifact](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36564356995/artifacts/11031126904)
+has SHA256 `becd9e906bf265c2e17f45513f2db1dca8fadc2c440ea8307791bd7c87042315`.
+The logs confirm complete verifier results and the expected rewards, rather than
+only successful process exit codes.
 
 The rubric and model workflow is prepared in `.github/workflows/model-evaluation.yml`.
 It uses the upstream production reviewer staging script and the current defaults.
 See [RUNNING.md](RUNNING.md) for the authentication and execution steps.
 The prepared matrix contains 12 standard trials and four cheat trials across
 both the current CI pair and assignment pair; none have been run yet.
+Codex can be selected independently while Claude access is unavailable.
 
 ## Earlier iteration results actually obtained
 
@@ -98,6 +115,12 @@ commands on a GitHub Actions Docker runner. Its log and raw results are linked
 above.
 
 ## Preliminary failure hypotheses (not trial findings)
+
+Design-review concern: the billing rules are largely spelled out and the
+reference program is compact. This task may be too easy for frontier agents or
+fail the rubric's `difficult` and `agentic` criteria. Static/oracle/nop success
+does not establish difficulty. Real trials may require a substantial redesign;
+the all-fail requirement has not been demonstrated.
 
 - A naive implementation may choose revisions by file order rather than
   `(recorded, revision)`, producing incorrect historical invoices.

@@ -32,6 +32,9 @@ settings, and uses the unmodified upstream cheat prompt. Each attempt receives a
 fresh Docker environment. Attempts are queued sequentially to limit subscription
 rate pressure; an error remains an error and must not be counted as a model failure.
 
+If only one subscription is available, select `agent=codex` or `agent=claude-code`
+to run that subset independently. The other agent and rubric remain required.
+
 The current pin is `harbor-framework/terminal-bench` at
 `1dcda8716784493721921c23e4bc7f7d988b4494`, checked 2026-09-29 UTC.
 The former `terminal-bench-3` URL redirects to this repository.

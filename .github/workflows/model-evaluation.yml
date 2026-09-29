@@ -13,6 +13,11 @@ on:
         type: choice
         options: [both, ci, assignment]
         default: both
+      agent:
+        description: Agent to evaluate (the rubric always uses the upstream reviewer)
+        type: choice
+        options: [all, codex, claude-code]
+        default: all
 
 permissions:
   contents: read
@@ -38,8 +43,9 @@ jobs:
         env:
           KIND: ${{ inputs.kind }}
           CONFIGURATION: ${{ inputs.configuration }}
+          SELECTED_AGENT: ${{ inputs.agent }}
         run: |
-          matrix=$(uv run --with PyYAML==6.0.3 python scripts/evaluate.py --matrix "$KIND" --configuration "$CONFIGURATION")
+          matrix=$(uv run --with PyYAML==6.0.3 python scripts/evaluate.py --matrix "$KIND" --configuration "$CONFIGURATION" --selected-agent "$SELECTED_AGENT")
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   evaluate:
