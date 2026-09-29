@@ -18,8 +18,8 @@ This is an independent hiring submission; no upstream PR is needed.
 | Docker build | GitHub Actions `TB3 local validation` run #2, `harbor run --agent oracle` and `--agent nop` on Docker | PASS: both environment builds and runs completed, no exceptions |
 | Oracle | `uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent oracle --env docker --yes --jobs-dir ../harbor-oracle` | PASS: 1 trial, 0 exceptions, reward 1.0 |
 | Nop | Same Harbor invocation with `--agent nop --jobs-dir ../harbor-nop` | PASS: 1 trial, 0 exceptions, reward 0.0 |
-| Standard trials | Three genuine verifier runs per agent/model | NOT RUN: Docker and model credentials unavailable |
-| Adversarial trials | One run per agent/model with TB3 cheat prompt | NOT RUN: Docker and model credentials unavailable |
+| Standard trials | Three genuine verifier runs per agent/model | NOT RUN: agent credentials unavailable on the Docker runner |
+| Adversarial trials | One run per agent/model with TB3 cheat prompt | NOT RUN: agent credentials unavailable on the Docker runner |
 
 GitHub Actions [run #2](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36527321411)
 at repository commit `253fdb47b7b57662b4bfccc7a70f93e69a80c14c`
