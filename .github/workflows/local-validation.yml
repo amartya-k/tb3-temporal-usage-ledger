@@ -28,12 +28,12 @@ jobs:
       - name: Docker build and oracle
         run: |
           cd tb3
-          uvx --from harbor==0.23.1.dev202609170426 harbor run +            -p tasks/temporal-usage-ledger --agent oracle --env docker --yes +            --jobs-dir ../harbor-oracle
+          uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent oracle --env docker --yes --jobs-dir ../harbor-oracle
       - name: Nop
         if: always()
         run: |
           cd tb3
-          uvx --from harbor==0.23.1.dev202609170426 harbor run +            -p tasks/temporal-usage-ledger --agent nop --env docker --yes +            --jobs-dir ../harbor-nop
+          uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent nop --env docker --yes --jobs-dir ../harbor-nop
       - name: Preserve raw validation results
         if: always()
         uses: actions/upload-artifact@v4
