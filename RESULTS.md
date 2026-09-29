@@ -15,17 +15,24 @@ This is an independent hiring submission; no upstream PR is needed.
 | Nop sanity | Compared the supplied legacy program with the independent fixed-history reference | Different output as intended; this is **not** a Harbor nop validation |
 | Harbor dry-run | `uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent oracle --env docker --dry-run --yes` | Blocked: `Docker is not installed or not on PATH` |
 | Implementation rubric | `harbor check` with the current rubric and reviewer model | NOT RUN: reviewer credentials unavailable |
-| Docker build | Harbor/Docker | NOT RUN: Docker daemon and CLI unavailable |
-| Oracle / nop | Harbor | NOT RUN: Docker unavailable |
+| Docker build | GitHub Actions `TB3 local validation` run #2, `harbor run --agent oracle` and `--agent nop` on Docker | PASS: both environment builds and runs completed, no exceptions |
+| Oracle | `uvx --from harbor==0.23.1.dev202609170426 harbor run -p tasks/temporal-usage-ledger --agent oracle --env docker --yes --jobs-dir ../harbor-oracle` | PASS: 1 trial, 0 exceptions, reward 1.0 |
+| Nop | Same Harbor invocation with `--agent nop --jobs-dir ../harbor-nop` | PASS: 1 trial, 0 exceptions, reward 0.0 |
 | Standard trials | Three genuine verifier runs per agent/model | NOT RUN: Docker and model credentials unavailable |
 | Adversarial trials | One run per agent/model with TB3 cheat prompt | NOT RUN: Docker and model credentials unavailable |
 
-The five functional checks were run on the host with a process wrapper. They
-verify algorithmic behavior, but they do not validate Harbor artifact transfer,
-the image build, privilege dropping, CTRF output, or the separate verifier.
+GitHub Actions [run #2](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36527321411)
+at repository commit `253fdb47b7b57662b4bfccc7a70f93e69a80c14c`
+ran on 2026-09-29 UTC. The log reports Docker available, static checks passed,
+oracle reward 1.0 and nop reward 0.0, each with zero exceptions. Its
+[`harbor-validation` artifact](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36527321411/artifacts/11014204812)
+contains the raw job directories. Run #1 failed because the workflow's Harbor
+commands contained stray `+` arguments; run #2 fixed that workflow error.
+
+The five functional checks were also run on the host with a process wrapper.
 The host sandbox rejects `setuid(65534)` with EINVAL; do not count that as an
-agent failure. No claims about model failure rates or exploit resistance follow
-from these local checks.
+agent failure. The completed oracle/nop runs validate the real Docker path,
+but no claims about model failure rates or exploit resistance follow from them.
 
 ## Configuration discrepancy
 
@@ -68,9 +75,9 @@ inconclusive. Analyze completed trajectories with the current
 Any standard pass or nonzero cheat reward requires task revision and a full
 rerun. The entries above are commands to execute, **not** completed results.
 The standalone repository also contains
-`.github/workflows/local-validation.yml`, which will run static, oracle, and
-nop commands on a GitHub Actions Docker runner after publication. Inspect its
-uploaded Harbor results before recording validation as passed.
+`.github/workflows/local-validation.yml`, which ran static, oracle, and nop
+commands on a GitHub Actions Docker runner. Its log and raw results are linked
+above.
 
 ## Preliminary failure hypotheses (not trial findings)
 
@@ -87,6 +94,6 @@ uploaded Harbor results before recording validation as passed.
 `tasks/temporal-usage-ledger/README.md` is an AI-assisted draft. TB3's guide
 requires its four explanatory sections to be written completely by a human.
 Amartya should replace them in his own words after reviewing the implementation.
-The task and verifier also need the real Docker, rubric, oracle, nop, six
-standard trials, and two adversarial trials recorded here. Until then this is
-a candidate, not a qualifying submission.
+The task still needs the rubric, six standard trials, and two adversarial
+trials recorded here. Until then this is a candidate, not a qualifying
+submission.
