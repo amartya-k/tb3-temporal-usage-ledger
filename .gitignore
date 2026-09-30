@@ -1,6 +1,6 @@
 __pycache__/
 *.pyc
-tb3/
+/tb3
 review-task/
 evaluation/
 evidence/
@@ -8,3 +8,6 @@ harbor-oracle/
 harbor-nop/
 auth.json
 .env
+analysis-tasks/
+source-results/
+source-repo/

@@ -40,7 +40,7 @@ def matrix(kind, configuration, selected_agent="all"):
     return entries
 
 
-def run(entry):
+def run(entry, task_override=None):
     agent = entry["agent"]
     if agent == "claude-code":
         if not os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"):
@@ -68,7 +68,7 @@ def run(entry):
     output = ROOT / "evaluation" / entry["id"]
     output.mkdir(parents=True, exist_ok=False)
     (output / "selection.json").write_text(json.dumps(entry, indent=2))
-    task_path = ROOT / TASK
+    task_path = Path(task_override) if task_override is not None else ROOT / TASK
     if entry["kind"] == "review":
         task_path = ROOT / "review-task"
         subprocess.run([
@@ -87,7 +87,7 @@ def run(entry):
     (output / "command.json").write_text(json.dumps(command, indent=2))
     try:
         subprocess.run(command, check=True)
-        trials = check(output / "jobs", 1 if entry["kind"] == "review" else 0)
+        trials = check(output / "jobs", 1 if entry["kind"] in ("review", "analysis") else 0)
         if entry["kind"] == "review":
             paths = list(trials[0][0].parent.glob("artifacts/**/verdicts.json"))
             if len(paths) != 1:
@@ -101,6 +101,18 @@ def run(entry):
                         or not str(value.get("explanation", "")).strip()]
             if failures:
                 raise ValueError(f"Rubric criteria failed: {failures}")
+        elif entry["kind"] == "analysis":
+            paths = list(trials[0][0].parent.glob("artifacts/**/analysis.json"))
+            if len(paths) != 1:
+                raise ValueError("Missing or ambiguous analysis artifact")
+            report = json.loads(paths[0].read_text())
+            rubric = tomllib.loads((UPSTREAM / "docs/prompts/trial-analysis.toml").read_text())
+            if set(report["checks"]) != {item["name"] for item in rubric["criteria"]}:
+                raise ValueError("Analysis must cover every upstream criterion")
+            for value in report["checks"].values():
+                if value.get("outcome") not in ("pass", "fail", "not_applicable") or not value.get("explanation", "").strip():
+                    raise ValueError("Invalid analysis finding")
+            print(json.dumps(report, indent=2))
         else:
             print("Reward gate met. Trajectory review is still required to classify the failure.")
     finally:

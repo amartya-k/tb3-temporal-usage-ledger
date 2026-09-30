@@ -80,6 +80,30 @@ Any standard pass requires a task revision and fresh trials. Any nonzero cheat
 reward requires investigation and revision. Preserve failed attempts and all
 iterations; never select only successful evaluation attempts for the report.
 
+## Automated trajectory review
+
+After a Model evaluation run completes, open **Actions → Trial analysis → Run
+workflow** and supply its numeric run ID. The workflow checks out the exact task
+revision evaluated by that run, downloads the preserved evidence, and stages a
+review per recorded trajectory with the pinned upstream analysis prompt, six
+criteria, JSON validator, and configured Claude analysis model. Local Actions
+artifacts replace the upstream hosted-trial download transport. A missing
+trajectory is not an analyzable model failure. This workflow requires the Claude
+subscription secret and has not yet been run end to end.
+
+The analyzer's findings may include `fail`; those findings must be addressed,
+not suppressed. A well-formed analysis is not itself evidence that the task
+qualifies. Preserve the `analysis-*` artifact and record its findings here.
+
+For the optional trusted host sensitivity check:
+
+```sh
+uv run --with pytest==9.1.1 python scripts/check_mutations.py
+```
+
+It verifies that six deliberately wrong reference variants are rejected. It
+does not replace Docker validation or the required adversarial trials.
+
 ## Author step
 
 The four explanatory sections in the task README remain AI-assisted drafts.

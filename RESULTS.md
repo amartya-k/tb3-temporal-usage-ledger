@@ -21,7 +21,26 @@ is now explicit. This revision has **not** yet established the all-fail bar.
   a temporary harness copy that substitutes the trusted reference program and
   skips UID isolation because this host cannot change UID; it is not Docker
   oracle evidence. The actual committed verifier retains all isolation.
-- New Docker oracle/nop and Codex trials are pending.
+- Docker validation passed in [run 36695330749](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36695330749)
+  at commit `61c1572cfb375626f4176de5d7a6844de84b83ec`: all 26 static checks,
+  environment/verifier builds, oracle reward 1.0 and nop reward 0.0, with no
+  Harbor exceptions. Artifact `11087127298` has SHA256
+  `670476847724f674fb89e65e18763e12d92c11cafe1281bec4209239d6b6872c`.
+- Six deliberately incorrect reference variants were rejected by the host
+  verifier sensitivity check (`scripts/check_mutations.py`): billing buffered
+  events, losing original receipts, ignoring invoice CAS, forgetting the
+  previous invoice, acknowledging a prefix, and partially committing ingest.
+  These are trusted host checks, not adversarial-agent evidence.
+- [Run 36695559793](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36695559793),
+  workflow attempt 1, tried three standard trials and one cheat trial for each
+  Codex configuration. All eight ended with `NonZeroAgentExitCodeError` and
+  are excluded from difficulty and cheat results. The downloaded first Astra
+  artifact (`11087697194`, SHA256
+  `abff942e446149da2bbe7b268661355763d45dc6b4956bb2e9f8ffec7abb5dc2`)
+  records a subscription usage-limit error in `agent/codex.txt` after reading
+  the task, before implementation. This is an execution failure, not a model
+  failure. Workflow attempt 2 was launched at 2026-09-30 15:43 UTC after
+  several hours; its results are pending.
 - Claude trials, upstream Claude rubric review/analysis, and human-authored
   README explanations remain required before a qualifying submission.
 

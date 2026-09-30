@@ -23,8 +23,9 @@ It does not substitute for the rubric or agent trials.
 [Evaluation setup](RUNNING.md) describes the subscription-authenticated workflow.
 The initial version failed the difficulty requirement: GPT-6 Astra passed 3/3
 and GPT-6 Sol passed 1/3. The revised durable-ledger task passes 26 local static
-checks and 12 host reference checks; fresh Docker and model validation are pending.
-Earlier Docker results apply only to the earlier task revision.
+checks, 12 host reference checks, and Docker oracle (1.0)/nop (0.0) validation.
+The revised model trials encountered a Codex subscription usage limit and are
+being retried; no qualifying model-failure claim is made.
 
 The four task README explanations are AI-assisted drafts. The contribution
 guide requires the author to rewrite those sections personally before
