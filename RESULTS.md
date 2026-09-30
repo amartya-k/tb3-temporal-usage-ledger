@@ -40,7 +40,16 @@ is now explicit. This revision has **not** yet established the all-fail bar.
   records a subscription usage-limit error in `agent/codex.txt` after reading
   the task, before implementation. This is an execution failure, not a model
   failure. Workflow attempt 2 was launched at 2026-09-30 15:43 UTC after
-  several hours; its results are pending.
+  several hours, then deliberately cancelled before completion to move to
+  attempt-specific artifact names. That interrupted attempt does not count.
+- [Run 36739527266](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36739527266)
+  was launched at 2026-09-30 15:48 UTC at commit
+  `a4412de41b2e5a1ace61f4e9abc3cf78fc35a682`, with `kind=suite`,
+  `configuration=both`, `agent=codex`. It evaluates the same task content as
+  revision `61c1572`; only automation and documentation changed. Results are
+  pending. The analysis task staging was checked locally and its task config
+  validated with the pinned Harbor model; automated Claude analysis remains
+  unrun.
 - Claude trials, upstream Claude rubric review/analysis, and human-authored
   README explanations remain required before a qualifying submission.
 
