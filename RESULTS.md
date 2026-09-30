@@ -37,8 +37,13 @@ The rubric and model workflow is prepared in `.github/workflows/model-evaluation
 It uses the upstream production reviewer staging script and the current defaults.
 See [RUNNING.md](RUNNING.md) for the authentication and execution steps.
 The prepared matrix contains 12 standard trials and four cheat trials across
-both the current CI pair and assignment pair; none have been run yet.
-Codex can be selected independently while Claude access is unavailable.
+both the current CI pair and assignment pair.
+Codex-only standard evaluation was launched in [run 36666825314](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36666825314)
+at revision `fa975e7ad3bde28744b106af7d8e0da1a6552549`. At the time of this
+update, the plan passed and the first trial was running; no model outcome is
+claimed. The owner requested proceeding without Claude, so Claude trials and
+the upstream Claude rubric reviewer remain unrun. This is a partial evaluation,
+not a qualifying completed submission.
 
 ## Earlier iteration results actually obtained
 

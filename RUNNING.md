@@ -1,10 +1,16 @@
 # Completing the evaluation
 
-The `Model evaluation` workflow is prepared but has not yet run. Model access
-and human authorship are still required; this repository is not submission-ready.
+The workflow defaults to `kind=standard`, `configuration=both`, and `agent=codex`.
+Codex standard evaluation was launched in [run 36666825314](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36666825314).
+Claude trials and the upstream Claude implementation reviewer are intentionally
+deferred at the owner's request. No Claude credential is needed for Codex runs.
+This partial evaluation does not satisfy the full assignment; human authorship
+and all required evaluation results are still outstanding.
 
 ## Subscription authentication
 
+For the current Codex-only setup, only `CODEX_AUTH_JSON` is required.
+The Claude secret below is optional until Claude evaluation is resumed.
 In this repository's **Settings → Secrets and variables → Actions**, add:
 
 | Repository secret | Value |
@@ -20,7 +26,11 @@ subscription supports every model ID below.
 
 ## Runs
 
-Open **Actions → Model evaluation → Run workflow**. Start with `kind=review`.
+Open **Actions → Model evaluation → Run workflow**. For Codex-only evaluation,
+keep `agent=codex`, run `kind=standard`, then `kind=cheat` after it finishes.
+Do not launch overlapping runs using the same subscription credential.
+
+For the full assignment once Claude access is available, start with `kind=review`.
 It stages the review task using upstream `scripts/review/stage_task.py`, the
 current implementation rubric, and the configured review agent/model.
 The workflow fails if any criterion fails or a verdict is missing.

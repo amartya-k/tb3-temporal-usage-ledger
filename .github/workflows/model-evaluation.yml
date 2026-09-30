@@ -7,7 +7,7 @@ on:
         description: Run the rubric first, then standard and cheat trials
         type: choice
         options: [review, standard, cheat]
-        default: review
+        default: standard
       configuration:
         description: Current CI defaults, assignment models, or both
         type: choice
@@ -17,7 +17,7 @@ on:
         description: Agent to evaluate (the rubric always uses the upstream reviewer)
         type: choice
         options: [all, codex, claude-code]
-        default: all
+        default: codex
 
 permissions:
   contents: read
