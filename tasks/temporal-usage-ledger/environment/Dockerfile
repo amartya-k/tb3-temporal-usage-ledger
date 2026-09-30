@@ -2,3 +2,5 @@
 FROM python:3.12-slim-bookworm
 WORKDIR /app
 COPY app /app/app
+COPY docs /app/docs
+COPY repro.py /app/repro.py

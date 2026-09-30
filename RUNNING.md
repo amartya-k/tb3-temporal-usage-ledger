@@ -1,7 +1,7 @@
 # Completing the evaluation
 
 The workflow defaults to `kind=standard`, `configuration=both`, and `agent=codex`.
-Codex standard evaluation was launched in [run 36666825314](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36666825314).
+The first Codex evaluation completed in [run 36666825314](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36666825314).
 Claude trials and the upstream Claude implementation reviewer are intentionally
 deferred at the owner's request. No Claude credential is needed for Codex runs.
 This partial evaluation does not satisfy the full assignment; human authorship
@@ -27,7 +27,8 @@ subscription supports every model ID below.
 ## Runs
 
 Open **Actions → Model evaluation → Run workflow**. For Codex-only evaluation,
-keep `agent=codex`, run `kind=standard`, then `kind=cheat` after it finishes.
+keep `agent=codex` and select `kind=suite` to queue standard then cheat trials
+sequentially. Individual `standard` and `cheat` modes remain available.
 Do not launch overlapping runs using the same subscription credential.
 
 For the full assignment once Claude access is available, start with `kind=review`.

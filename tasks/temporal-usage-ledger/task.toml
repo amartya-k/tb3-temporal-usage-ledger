@@ -4,7 +4,7 @@ artifacts = ["/app/app/"]
 
 [task]
 name = "terminal-bench/temporal-usage-ledger"
-description = "Repair a bitemporal usage-billing reconciliation engine."
+description = "Repair a durable CDC billing ledger with historical snapshots and atomic corrections."
 
 [metadata]
 author_name = "Amartya Kalapahar"
@@ -16,7 +16,7 @@ tags = ["billing", "bitemporal", "reconciliation", "python"]
 expert_time_estimate_hours = 4
 
 [verifier]
-timeout_sec = 180.0
+timeout_sec = 300.0
 environment_mode = "separate"
 
 [agent]

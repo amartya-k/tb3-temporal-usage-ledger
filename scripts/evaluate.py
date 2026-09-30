@@ -16,6 +16,8 @@ UPSTREAM = ROOT / "tb3"
 
 
 def matrix(kind, configuration, selected_agent="all"):
+    if kind == "suite":
+        return matrix("standard", configuration, selected_agent) + matrix("cheat", configuration, selected_agent)
     defaults = yaml.safe_load((UPSTREAM / ".github/harbor-run-defaults.yml").read_text())
     if kind == "review":
         return [{"id": "review", "kind": kind, "agent": defaults["review_agent"],
@@ -108,7 +110,7 @@ def run(entry):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--matrix", choices=("review", "standard", "cheat"))
+    parser.add_argument("--matrix", choices=("review", "standard", "cheat", "suite"))
     parser.add_argument("--configuration", choices=("ci", "assignment", "both"), default="both")
     parser.add_argument("--entry")
     parser.add_argument("--selected-agent", choices=("all", "codex", "claude-code"), default="all")

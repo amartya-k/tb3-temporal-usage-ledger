@@ -7,7 +7,54 @@ The contribution call, `CONTRIBUTING.md`, `docs/TASK_REVIEW_AUTOMATION.md`,
 `docs/REVIEWING.md`, rubric, static scripts, and trial workflow were reviewed.
 This is an independent hiring submission; no upstream PR is needed.
 
-## Current iteration
+## Revision 2: durable CDC ledger (2026-09-30)
+
+The initial task did not meet the difficulty requirement. The revision adds a
+professionally motivated persistence boundary: independent stream offsets,
+historical frontier reads, retries and conflicts, migration, compare-and-swap
+invoice versions, rounded correction deltas and a transactional outbox.
+The original billing API remains and the 1,000-millicents-per-cent conversion
+is now explicit. This revision has **not** yet established the all-fail bar.
+
+- All 26 static check scripts pass locally.
+- The 12 reference tests pass in 5.66 seconds on the host. This host check uses
+  a temporary harness copy that substitutes the trusted reference program and
+  skips UID isolation because this host cannot change UID; it is not Docker
+  oracle evidence. The actual committed verifier retains all isolation.
+- New Docker oracle/nop and Codex trials are pending.
+- Claude trials, upstream Claude rubric review/analysis, and human-authored
+  README explanations remain required before a qualifying submission.
+
+## Revision 1: standard trial findings
+
+[Run 36666825314](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36666825314)
+evaluated commit `fa975e7ad3bde28744b106af7d8e0da1a6552549`, six standard attempts:
+
+| Configuration | Attempt 1 | Attempt 2 | Attempt 3 |
+| --- | --- | --- | --- |
+| CI: Codex GPT-6 Astra, xhigh | reward 1 | reward 1 | reward 1 |
+| Assignment: Codex GPT-6 Sol, xhigh | reward 0 | reward 0 | reward 1 |
+
+All six completed without a Harbor exception. The workflow is red because its
+acceptance gate requires zero reward, so four legitimately solved trials
+caused the evaluation gate to fail. These are not infrastructure failures.
+
+The two Sol zero-reward artifacts were inspected, including trajectories,
+result files and verifier stdout. Both agents finished normally and built
+local randomized tests. Both divided millicents by 10 rather than 1,000,
+causing all six verifier tests to disagree on charge amounts (for example,
+1,000 millicents became 100 cents rather than 1 cent). Their local reference
+tests repeated the same unit-conversion mistake. No refusal or cutoff was
+observed. This is an implementation mistake, but it does not establish the
+intended temporal-reconciliation difficulty; revision 2 explicitly removes
+that ambiguity. Upstream automated Claude analysis has not run.
+
+Raw zero-reward evidence:
+- [Sol attempt 1](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36666825314/artifacts/11076618875), SHA256 `fc4fb19ce80aee13bb97528abab5b36043807199e6242a112ca7e35018797058`.
+- [Sol attempt 2](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36666825314/artifacts/11077348451), SHA256 `0ac28ffbad58844f33b6f35840df3f000e7939744eead1b1fc78da86e5e849f9`.
+
+## Revision 1: validation history
+
 
 The verifier now clears supplementary groups, drops UID/GID, prevents privilege
 recovery, captures subprocess output to files, and kills the subprocess group.
@@ -39,9 +86,7 @@ See [RUNNING.md](RUNNING.md) for the authentication and execution steps.
 The prepared matrix contains 12 standard trials and four cheat trials across
 both the current CI pair and assignment pair.
 Codex-only standard evaluation was launched in [run 36666825314](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36666825314)
-at revision `fa975e7ad3bde28744b106af7d8e0da1a6552549`. At the time of this
-update, the plan passed and the first trial was running; no model outcome is
-claimed. The owner requested proceeding without Claude, so Claude trials and
+at revision `fa975e7ad3bde28744b106af7d8e0da1a6552549`. This run has now completed; its results are recorded above. The owner requested proceeding without Claude, so Claude trials and
 the upstream Claude rubric reviewer remain unrun. This is a partial evaluation,
 not a qualifying completed submission.
 

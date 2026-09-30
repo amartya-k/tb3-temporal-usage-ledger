@@ -1,10 +1,10 @@
 # Temporal usage ledger — Terminal-Bench 3 task candidate
 
-An original task for repairing a bitemporal usage-billing reconciler. The
-agent receives a broken Python program and must produce accurate invoices
-despite late revisions, cancellations, overlapping tariffs, partial intervals,
-exact integer allocation, and account-level rounding. The verifier runs the
-submitted program on fixed and generated inputs in a separate container.
+An original task for repairing a durable CDC billing service. The agent must
+preserve historical billing semantics while handling out-of-order event delivery,
+idempotent retries, schema migration, concurrent invoice settlement and a durable
+outbox. The verifier compares fresh-process behavior with independent billing
+and state-transition models in a separate container.
 
 The task is in [`tasks/temporal-usage-ledger/`](tasks/temporal-usage-ledger/).
 [Evaluation results and reproduction commands](RESULTS.md) distinguish
@@ -20,11 +20,11 @@ The included GitHub Actions workflow checks static rules, oracle, and nop
 validation on a Docker-capable runner and preserves the raw Harbor results.
 It does not substitute for the rubric or agent trials.
 
-[Evaluation setup](RUNNING.md) describes the prepared subscription-authenticated
-rubric and trial workflow. The task was updated for the latest static requirements
-and verifier isolation rules. The current task passed all 26 static checks,
-Docker builds, oracle (reward 1), and nop (reward 0); see the linked evaluation
-record for the exact tested revision and evidence.
+[Evaluation setup](RUNNING.md) describes the subscription-authenticated workflow.
+The initial version failed the difficulty requirement: GPT-6 Astra passed 3/3
+and GPT-6 Sol passed 1/3. The revised durable-ledger task passes 26 local static
+checks and 12 host reference checks; fresh Docker and model validation are pending.
+Earlier Docker results apply only to the earlier task revision.
 
 The four task README explanations are AI-assisted drafts. The contribution
 guide requires the author to rewrite those sections personally before

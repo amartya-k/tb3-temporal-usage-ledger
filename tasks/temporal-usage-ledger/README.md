@@ -10,20 +10,22 @@
 
 ## Difficulty explanation
 
-The program must reconstruct two histories at each invoice cutoff, split usage at tariff boundaries, and allocate discrete units without losing any at the splits. Overlapping and revised rates interact with exact account-level rounding, so a locally plausible per-session calculation can produce a wrong invoice.
+AI-assisted draft requiring the author's rewrite: A backend engineer must reconcile independent delivery order and business-time revisions while preserving historical invoices across migration, retries, and concurrent writers. The synthetic CDC histories model realistic duplicate delivery, gaps, corrections and account movement; the hard part is maintaining all visibility and atomicity invariants together.
 
 ## Solution explanation
 
-Select the latest visible revision of every logical ID for each query, discard tombstones, and partition each intersecting usage session at the visible tariff boundaries. Use cumulative integer allocation on each partition, select the highest-precedence covering rate, then aggregate millicents and round once per account.
+AI-assisted draft requiring the author's rewrite: Store immutable received events separately from contiguous committed prefixes, and resolve every billing snapshot using both a delivery frontier and business-time cutoff. Commit mutation receipts, compare-and-swap invoice versions, frozen totals, and outbox records in one transaction; derive correction deltas from already-rounded invoice totals.
 
 ## Verification explanation
 
-The verifier runs the submitted program in an isolated process on fixed and generated histories, comparing its structured outputs with an independent per-second reference calculation. Tests cover late corrections, tombstones, gaps, overlaps, exact ties, zero-unit sessions, and input-order invariance.
+AI-assisted draft requiring the author's rewrite: Black-box subprocess tests compare persisted outputs with an independent in-memory transition model and a per-second billing model. The suite checks gaps, conflicts, retry receipts, migration, historical snapshots, invoice deltas, acknowledgments, concurrent writers, and process interruption; tests and rewards remain inaccessible to submitted processes.
 
 ## Relevant experience
 
-The author has worked on Python services and clinical data pipelines where late corrections, durable audit histories, and precise reconciliation matter.
+Human author must provide one to three sentences describing their own relevant professional experience; this section is not complete.
 
 ## Change Log
 
 - Added current metadata requirements and hardened subprocess privilege and process handling in the verifier.
+
+- Extended reconciliation into a durable CDC ledger with migration, atomic receipts, historical delivery frontiers, invoice corrections and an outbox.

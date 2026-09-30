@@ -6,7 +6,7 @@ on:
       kind:
         description: Run the rubric first, then standard and cheat trials
         type: choice
-        options: [review, standard, cheat]
+        options: [review, standard, cheat, suite]
         default: standard
       configuration:
         description: Current CI defaults, assignment models, or both
