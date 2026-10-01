@@ -7,10 +7,6 @@ deferred at the owner's request. No Claude credential is needed for Codex runs.
 This partial evaluation does not satisfy the full assignment; human authorship
 and all required evaluation results are still outstanding.
 
-The latest revised evaluation also does not qualify: one Astra trial passed
-and seven attempts ended with subscription-limit errors. Do not rerun the same
-revision to select favorable outcomes; revise the task and retain this history.
-
 ## Subscription authentication
 
 For the current Codex-only setup, only `CODEX_AUTH_JSON` is required.

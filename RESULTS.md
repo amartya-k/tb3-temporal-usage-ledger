@@ -6,6 +6,9 @@ The original baseline was `4def1f367467b34b18e0dbdc086400ba71c3e037`.
 The contribution call, `CONTRIBUTING.md`, `docs/TASK_REVIEW_AUTOMATION.md`,
 `docs/REVIEWING.md`, rubric, static scripts, and trial workflow were reviewed.
 This is an independent hiring submission; no upstream PR is needed.
+The repository link was emailed to Xiangkai on September 30, 2026 at 00:00 ET.
+That email called it completed; the qualification results below show that it
+does not currently satisfy the all-fail, Claude, or human-authorship requirements.
 
 ## Revision 2: durable CDC ledger (2026-09-30)
 

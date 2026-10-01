@@ -26,8 +26,8 @@ and GPT-6 Sol passed 1/3. The revised durable-ledger task passes 26 local static
 checks, 12 host reference checks, and Docker oracle (1.0)/nop (0.0) validation.
 The revised task was solved by GPT-6 Astra in a completed trial. The other
 seven trials hit the Codex subscription usage limit. This revision does not
-meet the all-fail requirement and must be redesigned before submission.
+meet the all-fail requirement. The repo link was already emailed to Klavis on September 30, 2026; further revisions would update that submitted repository.
 
 The four task README explanations are AI-assisted drafts. The contribution
 guide requires the author to rewrite those sections personally before
-submission.
+the task can claim full conformance.
