@@ -28,8 +28,18 @@ exceptions. Raw artifact `11162890511` has SHA256
 Three current-CI Codex Astra xhigh standard trials were launched in
 [run 36862733024](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36862733024)
 at commit `dc60adda10d5a9e106e47617296d567ab201bc79`.
-Their results are pending. The assignment model, all Claude trials, rubric,
-and adversarial trials remain unrun on this revision.
+The first trial completed in approximately 17 minutes with reward 1.0,
+zero Harbor exceptions, and 15 of 15 verifier tests passing. Its preserved
+[artifact](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36862733024/artifacts/11162139405)
+has SHA256 `e19fa0fd9c57e9f3d06563c3a4ecd3ddb11433437dcd770318cc0c4de8186d03`.
+The agent repaired integer billing and transactional SQLite persistence, then
+checked causal chains/cycles, replay, migration, concurrent writers, interrupted
+writes and a 2,000-event performance case. The causal extension was tractable
+for this model. The workflow was cancelled after the genuine pass because the
+all-fail condition for this revision was already impossible; attempts 2 and 3
+must not be counted as model failures. The assignment model, all Claude
+trials, rubric and adversarial trials remain unrun on this revision.
+**Revision 3 does not qualify and is not promoted to the submitted main branch.**
 This design has not demonstrated the all-fail requirement and is not yet the
 submitted default branch.
 

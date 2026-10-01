@@ -26,8 +26,8 @@ first durable-ledger revision passed 26 static checks and Docker oracle/nop
 validation, but Astra solved it in one completed trial; seven subsequent
 attempts hit subscription limits. This `revision-3` branch adds causal CDC
 predecessors and tests their effect on delivery watermarks and historical
-snapshots. Its host reference tests and static checks pass; Docker validation
-and model trials are tracked in [RESULTS.md](RESULTS.md). The repository link
+snapshots. It passes static, oracle, and nop validation, but Astra also solved this
+revision in one completed attempt. [RESULTS.md](RESULTS.md) records the evidence. The repository link
 was emailed to Klavis on September 30, 2026, before this branch was created.
 The submitted default branch still contains revision 2.
 
