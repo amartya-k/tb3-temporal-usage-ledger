@@ -10,6 +10,20 @@ The repository link was emailed to Xiangkai on September 30, 2026 at 00:00 ET.
 That email called it completed; the qualification results below show that it
 does not currently satisfy the all-fail, Claude, or human-authorship requirements.
 
+## Later experiment: causal CDC revision (2026-10-01)
+
+A substantive follow-up is preserved on the
+[`revision-3` branch](https://github.com/amartya-k/tb3-temporal-usage-ledger/tree/revision-3),
+with its full [results](https://github.com/amartya-k/tb3-temporal-usage-ledger/blob/revision-3/RESULTS.md).
+It added causal predecessor vectors and causally closed historical frontiers.
+All 26 upstream static checks passed, the Docker oracle received 1.0 and nop
+received 0.0 with no exceptions. A current-CI Codex Astra xhigh trial then
+completed with reward **1.0** and all 15 verifier tests passed. The model
+worked through the causal dependency behavior and implemented the solution in
+about 17 minutes. The remaining queued trials were cancelled after this pass
+because the revision already failed the all-fail requirement. This branch is
+an honest negative result, not a qualifying replacement task.
+
 ## Revision 2: durable CDC ledger (2026-09-30)
 
 The initial task did not meet the difficulty requirement. The revision adds a
