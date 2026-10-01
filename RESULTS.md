@@ -19,8 +19,17 @@ The isolated verifier includes fixed-point chains, pending cycles, migration,
 shuffled multi-source histories and retry conflicts. The prior billing,
 persistence and outbox contracts remain. The new reference passes 15 trusted
 host tests; nine deliberately incorrect reference variants are detected, and
-all 26 upstream static checks pass locally. Docker oracle/nop, rubric,
-standard and cheat agent trials are still required for this exact revision.
+all 26 upstream static checks pass locally. Docker validation passed in
+[run 36862230679](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36862230679)
+at task commit `65a69eb2b6b47bcaeaf7ae68f368135db90a5663`:
+Docker builds completed, oracle reward 1.0, nop reward 0.0, and zero Harbor
+exceptions. Raw artifact `11162890511` has SHA256
+`56a337f50a1369837fd5e8369a928c83ea1b907b61fa74144bc7084a0bdfdc26`.
+Three current-CI Codex Astra xhigh standard trials were launched in
+[run 36862733024](https://github.com/amartya-k/tb3-temporal-usage-ledger/actions/runs/36862733024)
+at commit `dc60adda10d5a9e106e47617296d567ab201bc79`.
+Their results are pending. The assignment model, all Claude trials, rubric,
+and adversarial trials remain unrun on this revision.
 This design has not demonstrated the all-fail requirement and is not yet the
 submitted default branch.
 
