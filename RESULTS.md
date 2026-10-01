@@ -20,7 +20,7 @@ All 26 upstream static checks passed, the Docker oracle received 1.0 and nop
 received 0.0 with no exceptions. A current-CI Codex Astra xhigh trial then
 completed with reward **1.0** and all 15 verifier tests passed. The model
 worked through the causal dependency behavior and implemented the solution in
-about 17 minutes. The remaining queued trials were cancelled after this pass
+about 17 minutes. The two remaining attempts were cancelled after this pass
 because the revision already failed the all-fail requirement. This branch is
 an honest negative result, not a qualifying replacement task.
 
