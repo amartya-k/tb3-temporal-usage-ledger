@@ -26,7 +26,8 @@ def migrate(c):
     c.execute("CREATE TABLE IF NOT EXISTS offsets (source TEXT PRIMARY KEY, committed INTEGER NOT NULL)")
     c.execute("CREATE TABLE IF NOT EXISTS receipts (id TEXT PRIMARY KEY, request TEXT NOT NULL, response TEXT NOT NULL)")
     c.execute("CREATE TABLE IF NOT EXISTS documents (seq INTEGER PRIMARY KEY, invoice TEXT NOT NULL, version INTEGER NOT NULL, document TEXT NOT NULL, acked INTEGER NOT NULL DEFAULT 0, UNIQUE(invoice,version))")
-    c.execute("PRAGMA user_version=2")
+    c.execute("CREATE TABLE IF NOT EXISTS dependencies (source TEXT NOT NULL, seq INTEGER NOT NULL, required TEXT NOT NULL, PRIMARY KEY(source,seq))")
+    c.execute("PRAGMA user_version=3")
 
 
 def watermarks(c):
@@ -39,7 +40,11 @@ def resolve(c, requested):
         return {k: v for k, v in available.items() if v > 0}
     if any(v > available.get(k, 0) for k, v in requested.items()):
         raise DomainError("frontier_unavailable")
-    return {k: v for k, v in requested.items() if v > 0}
+    cuts = {k: v for k, v in requested.items() if v > 0}
+    for source, seq, raw in c.execute("SELECT source,seq,required FROM dependencies"):
+        if seq <= cuts.get(source, 0) and any(n > cuts.get(k, 0) for k, n in json.loads(raw).items()):
+            raise DomainError("frontier_unavailable")
+    return cuts
 
 
 def snapshot(c, frontier, queries):
@@ -63,23 +68,37 @@ def ingest(c, req):
         logical[kind, p["id"], p["recorded"], p["revision"]] = canon(p)
     for e in req["events"]:
         source, seq, kind, payload = e["source"], e["seq"], e["kind"], e["payload"]
+        required = e.get("requires", {})
         raw = canon(payload)
         prior = c.execute("SELECT kind,payload FROM history WHERE source=? AND seq=?", (source, seq)).fetchone()
         if prior and (prior[0] != kind or canon(json.loads(prior[1])) != raw):
             raise DomainError("event_conflict")
+        if prior:
+            old = c.execute("SELECT required FROM dependencies WHERE source=? AND seq=?", (source, seq)).fetchone()
+            if (json.loads(old[0]) if old else {}) != required:
+                raise DomainError("event_conflict")
         key = (kind, payload["id"], payload["recorded"], payload["revision"])
         if key in logical and logical[key] != raw:
             raise DomainError("revision_conflict")
         logical[key] = raw
         c.execute("INSERT OR IGNORE INTO history VALUES(?,?,?,?)", (source, seq, kind, raw))
+        c.execute("INSERT OR IGNORE INTO dependencies VALUES(?,?,?)", (source, seq, canon(required)))
         c.execute("INSERT OR IGNORE INTO offsets VALUES(?,0)", (source,))
-    for source, mark in watermarks(c).items():
-        for (seq,) in c.execute("SELECT seq FROM history WHERE source=? AND seq>? ORDER BY seq", (source, mark)):
-            if seq != mark + 1:
-                break
-            mark = seq
+    marks = watermarks(c)
+    pending = {}
+    for source, seq, raw in c.execute("SELECT h.source,h.seq,d.required FROM history h LEFT JOIN dependencies d USING(source,seq)"):
+        pending[source, seq] = json.loads(raw) if raw else {}
+    changed = True
+    while changed:
+        changed = False
+        for source in marks:
+            required = pending.get((source, marks[source]+1))
+            if required is not None and all(marks.get(k, 0) >= n for k, n in required.items()):
+                marks[source] += 1
+                changed = True
+    for source, mark in marks.items():
         c.execute("UPDATE offsets SET committed=? WHERE source=?", (mark, source))
-    return {"watermarks": watermarks(c)}
+    return {"watermarks": marks}
 
 
 def settle(c, req):

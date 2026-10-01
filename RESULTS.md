@@ -10,6 +10,20 @@ The repository link was emailed to Xiangkai on September 30, 2026 at 00:00 ET.
 That email called it completed; the qualification results below show that it
 does not currently satisfy the all-fail, Claude, or human-authorship requirements.
 
+## Revision 3: causal CDC candidate (branch `revision-3`)
+
+This branch adds producer-declared causal predecessors to each change event.
+Watermarks advance only when delivery order and cross-source dependencies are
+satisfied; historical frontier reads reject vectors that omit a predecessor.
+The isolated verifier includes fixed-point chains, pending cycles, migration,
+shuffled multi-source histories and retry conflicts. The prior billing,
+persistence and outbox contracts remain. The new reference passes 15 trusted
+host tests; nine deliberately incorrect reference variants are detected, and
+all 26 upstream static checks pass locally. Docker oracle/nop, rubric,
+standard and cheat agent trials are still required for this exact revision.
+This design has not demonstrated the all-fail requirement and is not yet the
+submitted default branch.
+
 ## Revision 2: durable CDC ledger (2026-09-30)
 
 The initial task did not meet the difficulty requirement. The revision adds a

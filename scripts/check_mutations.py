@@ -18,6 +18,9 @@ MUTATIONS = {
                             'row[key] = current.get(name, {}).get(key, 0)'),
     'acknowledge_prefix': ('UPDATE documents SET acked=1 WHERE seq=?', 'UPDATE documents SET acked=1 WHERE seq<=?'),
     'commit_partial_ingest': ('logical[key] = raw\n        c.execute(', 'logical[key] = raw\n        c.commit()\n        c.execute('),
+    'ignore_causal_predecessors': ('all(marks.get(k, 0) >= n for k, n in required.items())', 'True'),
+    'accept_open_frontier': ('if seq <= cuts.get(source, 0) and any(n > cuts.get(k, 0) for k, n in json.loads(raw).items()):', 'if False:'),
+    'forget_dependency_on_replay': ('(json.loads(old[0]) if old else {}) != required', 'False'),
 }
 
 

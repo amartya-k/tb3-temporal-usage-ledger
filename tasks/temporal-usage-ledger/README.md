@@ -2,7 +2,7 @@
 
 - **Author:** Amartya Kalapahar (27891310+amartya-k@users.noreply.github.com)
 - **Category:** `Software`
-- **Tags:** <code>billing</code> <code>bitemporal</code> <code>reconciliation</code> <code>python</code>
+- **Tags:** <code>billing</code> <code>bitemporal</code> <code>reconciliation</code> <code>causal-ordering</code> <code>python</code>
 - **Expert time:** 4 hours
 - **Agent timeout:** 4 hours
 - **CPUs:** 2
@@ -29,3 +29,5 @@ Human author must provide one to three sentences describing their own relevant p
 - Added current metadata requirements and hardened subprocess privilege and process handling in the verifier.
 
 - Extended reconciliation into a durable CDC ledger with migration, atomic receipts, historical delivery frontiers, invoice corrections and an outbox.
+
+- Revision 3 adds causal predecessor vectors, fixed-point stream watermarks, and causally closed historical frontiers.

@@ -15,15 +15,24 @@ class Model:
 
     def marks(self):
         marks = {source: 0 for source, _ in self.events}
-        for source in marks:
-            while (source, marks[source] + 1) in self.events:
-                marks[source] += 1
+        changed = True
+        while changed:
+            changed = False
+            for source in marks:
+                e = self.events.get((source, marks[source] + 1))
+                if e is not None and all(marks.get(k, 0) >= n for k, n in e.get('requires', {}).items()):
+                    marks[source] += 1
+                    changed = True
         return marks
 
     def view(self, requested):
         marks = self.marks()
         cuts = marks if requested is None else requested
         if any(n > marks.get(source, 0) for source, n in cuts.items()):
+            raise ValueError('frontier_unavailable')
+        if any(seq <= cuts.get(source, 0)
+               and any(n > cuts.get(k, 0) for k,n in event.get('requires', {}).items())
+               for (source,seq),event in self.events.items()):
             raise ValueError('frontier_unavailable')
         return {source: n for source, n in cuts.items() if n}
 
@@ -60,7 +69,7 @@ class Model:
             merged = dict(self.events)
             for e in req['events']:
                 key = e['source'], e['seq']
-                if key in merged and encoded(merged[key]) != encoded(e):
+                if key in merged and encoded(dict(merged[key],requires=merged[key].get('requires', {}))) != encoded(dict(e,requires=e.get('requires', {}))):
                     raise ValueError('event_conflict')
                 merged[key] = e
             versions = {}

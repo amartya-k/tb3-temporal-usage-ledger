@@ -12,7 +12,7 @@ author_email = "27891310+amartya-k@users.noreply.github.com"
 author_github = "amartya-k"
 category = "Software"
 subcategory = "Systems"
-tags = ["billing", "bitemporal", "reconciliation", "python"]
+tags = ["billing", "bitemporal", "reconciliation", "causal-ordering", "python"]
 expert_time_estimate_hours = 4
 
 [verifier]
