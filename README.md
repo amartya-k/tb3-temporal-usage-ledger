@@ -21,12 +21,15 @@ validation on a Docker-capable runner and preserves the raw Harbor results.
 It does not substitute for the rubric or agent trials.
 
 [Evaluation setup](RUNNING.md) describes the subscription-authenticated workflow.
-The initial version failed the difficulty requirement: GPT-6 Astra passed 3/3
-and GPT-6 Sol passed 1/3. The revised durable-ledger task passes 26 local static
-checks, 12 host reference checks, and Docker oracle (1.0)/nop (0.0) validation.
-The revised task was solved by GPT-6 Astra in a completed trial. The other
-seven trials hit the Codex subscription usage limit. This revision does not
-meet the all-fail requirement. The repo link was already emailed to Klavis on September 30, 2026; further revisions would update that submitted repository.
+The original task was solved by GPT-6 Astra in three of three trials. The
+first durable-ledger revision passed 26 static checks and Docker oracle/nop
+validation, but Astra solved it in one completed trial; seven subsequent
+attempts hit subscription limits. This `revision-3` branch adds causal CDC
+predecessors and tests their effect on delivery watermarks and historical
+snapshots. Its host reference tests and static checks pass; Docker validation
+and model trials are tracked in [RESULTS.md](RESULTS.md). The repository link
+was emailed to Klavis on September 30, 2026, before this branch was created.
+The submitted default branch still contains revision 2.
 
 The four task README explanations are AI-assisted drafts. The contribution
 guide requires the author to rewrite those sections personally before
