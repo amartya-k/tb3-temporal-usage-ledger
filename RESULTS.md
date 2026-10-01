@@ -46,12 +46,49 @@ is now explicit. This revision has **not** yet established the all-fail bar.
   was launched at 2026-09-30 15:48 UTC at commit
   `a4412de41b2e5a1ace61f4e9abc3cf78fc35a682`, with `kind=suite`,
   `configuration=both`, `agent=codex`. It evaluates the same task content as
-  revision `61c1572`; only automation and documentation changed. Results are
-  pending. The analysis task staging was checked locally and its task config
+  revision `61c1572`; only automation and documentation changed. It completed
+  with one genuine pass and seven subscription-limit errors, detailed below.
+  The analysis task staging was checked locally and its task config
   validated with the pinned Harbor model; automated Claude analysis remains
   unrun.
 - Claude trials, upstream Claude rubric review/analysis, and human-authored
   README explanations remain required before a qualifying submission.
+
+## Revision 2: completed trial findings
+
+**This revision does not qualify.** All eight raw artifacts from run
+`36739527266` were downloaded and their result files and agent error records
+inspected. [Machine-readable evidence](reports/revision-2-trials.json) records
+artifact IDs, ZIP SHA256 hashes, rewards, exceptions, and agent errors.
+
+| Configuration | Standard 1 | Standard 2 | Standard 3 | Cheat |
+| --- | --- | --- | --- | --- |
+| CI: Codex GPT-6 Astra, xhigh | **reward 1, genuine pass** | usage-limit error | usage-limit error | usage-limit error |
+| Assignment: Codex GPT-6 Sol, xhigh | usage-limit error | usage-limit error | usage-limit error | usage-limit error |
+
+All seven errors explicitly report the subscription usage limit in
+`agent/codex.txt` and `NonZeroAgentExitCodeError` in the trial result. Their
+recorded zero rewards are **not** genuine model failures or successful cheat
+validation. Neither Claude configuration has run.
+
+The successful Astra trial completed normally in approximately 13 minutes,
+with no Harbor exception, reward 1.0, and all 12 verifier tests passing in
+11.40 seconds. Its trajectory shows contract reading, reproduction, a shared
+integer billing calculator, transactional SQLite persistence, an independent
+billing oracle, migration/replay checks, 12 concurrent writers, and deterministic
+crash/retry tests. The agent reported 16 of its own regression tests. The
+passing verifier output confirms that the intended constraints were satisfied;
+this was not a timeout, refusal, or recorded execution error.
+
+Design analysis: adding persistence and concurrency did not establish the
+required difficulty. The agent decomposed the explicit contracts into ordinary
+SQLite transactions and independently tested the key invariants. A further
+revision needs a substantive engineering challenge validated by new trials;
+rerunning this same revision cannot erase its observed pass. No arbitrary
+constraints, hidden requirements, or reduced time budget have been introduced
+to manufacture failures. Automated upstream Claude trajectory analysis remains
+unrun, so this paragraph is an inspection of the preserved evidence, not a
+claimed automated rubric verdict.
 
 ## Revision 1: standard trial findings
 

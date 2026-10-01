@@ -24,8 +24,9 @@ It does not substitute for the rubric or agent trials.
 The initial version failed the difficulty requirement: GPT-6 Astra passed 3/3
 and GPT-6 Sol passed 1/3. The revised durable-ledger task passes 26 local static
 checks, 12 host reference checks, and Docker oracle (1.0)/nop (0.0) validation.
-The revised model trials encountered a Codex subscription usage limit and are
-being retried; no qualifying model-failure claim is made.
+The revised task was solved by GPT-6 Astra in a completed trial. The other
+seven trials hit the Codex subscription usage limit. This revision does not
+meet the all-fail requirement and must be redesigned before submission.
 
 The four task README explanations are AI-assisted drafts. The contribution
 guide requires the author to rewrite those sections personally before
